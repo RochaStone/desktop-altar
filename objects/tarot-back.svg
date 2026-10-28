@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120" width="100" height="120" role="img" aria-label="tarot back"><title>tarot back</title>
+<rect x="24" y="16" width="52" height="92" rx="4" fill="#50163C" stroke="#3B1230" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="30" y="22" width="40" height="80" rx="2" fill="none" stroke="#E9B949" stroke-width="2"/>
+<path d="M50 44 l4 10 l10 4 l-10 4 l-4 10 l-4 -10 l-10 -4 l10 -4z" fill="#E9B949"/>
+<path d="M56 82 a8 8 0 1 1 -12 -8 a6 6 0 0 0 12 8z" fill="#E9B949"/>
+<circle cx="50" cy="32" r="2" fill="#E9B949"/><path d="M18 112 h64" stroke="#3B1230" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+</svg>

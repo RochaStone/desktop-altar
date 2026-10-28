@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120" width="100" height="120" role="img" aria-label="pillar candle"><title>pillar candle</title>
+<rect x="28" y="52" width="44" height="58" rx="4" fill="#FFE3F1" stroke="#3B1230" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M28 60 q6 8 10 0 q5 12 10 2 q6 7 10 -1 q4 6 14 -1" fill="none" stroke="#3B1230" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="28" y="84" width="44" height="9" fill="#682047" stroke="#3B1230" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M30 112 h40" stroke="#3B1230" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M50 52 v-6" stroke="#3B1230" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><g class="flame" style="transform-origin:50px 46px"><path d="M50 19.599999999999998 C58.8 31.479999999999997 58.8 43.36 50 46 C41.2 43.36 41.2 31.479999999999997 50 19.599999999999998Z" fill="#FE9DCA" stroke="#3B1230" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M50 31.479999999999997 C53.96 38.08 53.52 43.888 50 44.944 C46.48 43.888 46.04 38.08 50 31.479999999999997Z" fill="#E9B949"/></g>
+</svg>

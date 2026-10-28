@@ -1,0 +1,27 @@
+{
+  "name": "ROCHEVERSE LORE",
+  "intention": "WHAT IF YOUR FOUNDER WORLD WORKS OUT?",
+  "motif": "y2k-blog",
+  "screen": "2560x1600",
+  "moon": true,
+  "hemisphere": "north",
+  "candle_flicker": true,
+  "objects": [
+    { "type": "crescent-moon", "shelf": 1 },
+    { "type": "tarot-back", "shelf": 1 },
+    { "type": "intention-card", "label": "LORE", "shelf": 1 },
+    { "type": "crystal-cluster", "shelf": 1 },
+    { "type": "feather", "shelf": 1 },
+    { "type": "candle", "shelf": 2 },
+    { "type": "seashell", "shelf": 2 },
+    { "type": "pillar-candle", "shelf": 2 },
+    { "type": "pearl", "shelf": 2 },
+    { "type": "incense", "shelf": 2 },
+    { "type": "rose", "shelf": 2 }
+  ],
+  "daily_line": [
+    "I AM SO LUCKY",
+    "EVERYTHING WORKS OUT FOR ME",
+    "dress code: whimsy lore"
+  ]
+}

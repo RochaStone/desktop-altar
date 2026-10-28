@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120" width="100" height="120" role="img" aria-label="candle"><title>candle</title>
+<path d="M22 106 Q50 118 78 106 L74 100 Q50 110 26 100Z" fill="#E9B949" stroke="#3B1230" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="43" y="40" width="14" height="64" rx="2" fill="#FFF7F4" stroke="#3B1230" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M43 48 q3 9 6 1 q2 12 5 3 q2 5 3 0" fill="#FFF7F4" stroke="#3B1230" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M50 40 v-5" stroke="#3B1230" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><g class="flame" style="transform-origin:50px 35px"><path d="M50 11.0 C58.0 21.799999999999997 58.0 32.6 50 35 C42.0 32.6 42.0 21.799999999999997 50 11.0Z" fill="#FE9DCA" stroke="#3B1230" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M50 21.799999999999997 C53.6 27.8 53.2 33.08 50 34.04 C46.8 33.08 46.4 27.8 50 21.799999999999997Z" fill="#E9B949"/></g>
+</svg>

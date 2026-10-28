@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120" width="100" height="120" role="img" aria-label="cauldron"><title>cauldron</title>
+<path d="M18 62 h64 q2 40 -32 44 q-34 -4 -32 -44z" fill="#50163C" stroke="#3B1230" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="14" y="56" width="72" height="8" rx="4" fill="#E9B949" stroke="#3B1230" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M30 102 l-4 10 M70 102 l4 10 M50 106 v6" stroke="#3B1230" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="40" cy="50" r="5" fill="#FE9DCA" stroke="#3B1230" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="54" cy="44" r="4" fill="#FE9DCA" stroke="#3B1230" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="62" cy="52" r="3" fill="#FE9DCA" stroke="#3B1230" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+</svg>

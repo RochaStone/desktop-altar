@@ -1,0 +1,16 @@
+{
+  "name": "",
+  "intention": "",
+  "motif": "analog",
+  "screen": "2560x1600",
+  "moon": true,
+  "hemisphere": "north",
+  "candle_flicker": true,
+  "objects": [
+    { "type": "candle", "label": "" },
+    { "type": "crystal-point", "label": "" },
+    { "type": "seashell", "label": "" },
+    { "type": "rose", "label": "" }
+  ],
+  "daily_line": []
+}

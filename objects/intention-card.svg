@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120" width="100" height="120" role="img" aria-label="intention card"><title>intention card</title>
+<path d="M30 112 L42 40 M70 112 L58 40" stroke="#3B1230" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="24" y="30" width="52" height="68" rx="3" fill="#FFF7F4" stroke="#3B1230" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" transform="rotate(-3 50 64)"/>
+<path d="M33 50 h30 M33 60 h34 M33 70 h24" fill="none" stroke="#50163C" stroke-width="2.5" stroke-linecap="round" transform="rotate(-3 50 64)"/>
+<path d="M52 82 c-3 -4 -9 -1 -6 4 l6 5 l6 -5 c3 -5 -3 -8 -6 -4z" fill="#C2246E" transform="rotate(-3 50 64)"/>
+</svg>
