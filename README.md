@@ -9,9 +9,9 @@ Your intention across the top, written in your words.
 Today's real moon beside it, and a line that greets you each new day.
 Keep it as a still wallpaper, or put it live so the candles flicker and the moon turns with the nights.
 
-<p align="center"><img src="docs/img/hero-y2k.png" width="760" alt="A cream 2003-style window titled altar.exe on blush wallpaper tiled with gold pixel stars. Inside: ROCHEVERSE LORE in pink pixel type over the line WHAT IF YOUR FOUNDER WORLD WORKS OUT? in heavy plum serif, two wine shelves with a crescent moon, a tarot card, an intention card labelled LORE, a crystal cluster and a feather above, and a candle, a seashell, a pillar candle, a pearl, incense and a rose below. A blush cloth reads I AM SO LUCKY. The sidebar shows a waning gibbous moon, about me, mood and a visitor counter."></p>
+<p align="center"><img src="docs/img/hero-y2k.png" width="760" alt="A cream 2003-style window titled altar.exe on blush wallpaper tiled with gold pixel stars. Inside: ROCHEVERSE LORE in pink pixel type over the line WHAT IF YOUR FOUNDER WORLD WORKS OUT? in heavy plum serif, and two wine shelves of painted pearl-pink objects: a crescent moon charm, a gold photo frame, a crystal cluster, a bell with a bow and a cauldron above, and a lit pillar candle, an open shell with a pearl, a lit tealight, incense with smoke and a dried rose below. A blush cloth reads I AM SO LUCKY. The sidebar shows a waning gibbous moon, about me, mood and a visitor counter."></p>
 
-<p align="center"><img src="docs/img/triptych.png" width="760" alt="The same altar three ways: analog as a blush paper sheet taped to a cream desk with cream shelves and a LORE stamp, cyberpunk as a plum cyberdeck with gold screws, a terminal prompt and glowing candles, and y2k-blog as the cream 2003 window."></p>
+<p align="center"><img src="docs/img/triptych.png" width="760" alt="The same painted altar three ways: analog as a blush paper sheet taped to a cream desk with cream shelves and a LORE stamp, cyberpunk as a plum cyberdeck with gold screws and a terminal prompt, and y2k-blog as the cream 2003 window."></p>
 
 <p align="center"><sub>One altar, three moods: analog, cyberpunk, y2k-blog. This one is Rocha's. Yours holds whatever you choose.</sub></p>
 
@@ -192,6 +192,7 @@ python3 build.py altar.config.json --out out/ --motif cyberpunk --size 1440x900
 - **Übersicht** by Felix Hageloh ([felixhageloh/uebersicht](https://github.com/felixhageloh/uebersicht)): GPL-3.0. This kit writes a widget file for it and uses none of its code.
 - **The moon** follows Jean Meeus, *Astronomical Algorithms* (2nd edition), chapter 49, ported from the sibling Rocha Coded kit analog-bag (MIT).
 - **The style loader and the Chrome helper** come from the sibling kit desktop-core (MIT).
+- **The painted drawer** is generated art made for this kit, cut out on-device. See `docs/IMAGES.md`.
 - **Fonts** from Google Fonts under the SIL Open Font License: Fraunces, Bricolage Grotesque, DM Mono, Permanent Marker, Pinyon Script and Silkscreen.
 
 ## Licence

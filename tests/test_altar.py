@@ -227,7 +227,7 @@ class BuildOutput(unittest.TestCase):
             self.assertNotRegex(html, r"<script[^>]+src=")
             self.assertEqual(set(re.findall(r'(?:href|src)="(https?://[^/"]+)', html)),
                              {"https://fonts.googleapis.com", "https://fonts.gstatic.com"})
-            self.assertEqual(html.count('class="obj '), 11)
+            self.assertEqual(html.count('class="obj '), len(HER["objects"]))
             for page in (html, (ROOT / "arrange.html").read_text(encoding="utf-8")):
                 self.assertNotIn("innerHTML", page)
                 self.assertNotIn("console.log", page)
@@ -293,7 +293,7 @@ class LightAndPainted(unittest.TestCase):
             html = res["html"].read_text(encoding="utf-8")
             self.assertNotIn('class="art painted"', html)
             self.assertEqual(html.count('<svg class="art"'), len(HER["objects"]))
-            self.assertIn("k-candle", html)
+            self.assertIn("k-pillar-candle", html)
 
     def test_painted_file_is_used_when_present(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -301,7 +301,8 @@ class LightAndPainted(unittest.TestCase):
             (tmp / "objects" / "painted").mkdir(parents=True)
             (tmp / "objects" / "painted" / "candle.png").write_bytes(self.PNG)
             cfg = {"objects": [{"type": "painted/candle.png"}, {"type": "painted/seashell.png"}]}
-            res = build.build(cfg, tmp / "o", None, build.STYLE_EXAMPLE, png=False, config_dir=tmp, now=NOW)
+            with mock.patch.object(build, "PAINTED_DIR", tmp / "kit-painted-empty"):
+                res = build.build(cfg, tmp / "o", None, build.STYLE_EXAMPLE, png=False, config_dir=tmp, now=NOW)
             html = res["html"].read_text(encoding="utf-8")
             self.assertEqual(html.count('class="art painted"'), 1)
             self.assertEqual(html.count('<svg class="art"'), 1)
@@ -309,6 +310,16 @@ class LightAndPainted(unittest.TestCase):
             with self.assertRaises(ValueError):
                 build.build({"objects": [{"type": "painted/unicorn.png"}]}, tmp / "p", None, build.STYLE_EXAMPLE,
                             png=False, config_dir=tmp, now=NOW)
+
+    def test_kit_painted_drawer(self):
+        files = sorted((ROOT / "objects" / "painted").glob("*.png"))
+        self.assertEqual(len(files), 10)
+        for f in files:
+            self.assertIn(f.stem, build.OBJECT_TYPES, f"{f.name} needs a drawing of the same name to fall back to")
+            self.assertLess(f.stat().st_size, 300 * 1024, f.name)
+            self.assertEqual(f.read_bytes()[:8], b"\x89PNG\r\n\x1a\n", f.name)
+            w, h = render.png_size(f)
+            self.assertEqual(max(w, h), 600, f.name)
 
     def test_candles_and_incense_are_buttons(self):
         with tempfile.TemporaryDirectory() as tmp:

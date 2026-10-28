@@ -52,8 +52,8 @@ def _figure(item: dict, i: int, dark: bool, pal: dict) -> str:
     label = escape(item.get("label") or "")
     cap = f'<figcaption>{label}</figcaption>' if label else ""
     kind = escape(item["kind"])
-    lit = " lit" if item["kind"] in FLAME_Y else ""
-    glow = f';--fy:{FLAME_Y[item["kind"]]}' if lit else ""
+    lit = (" lit" if item["kind"] in FLAME_Y else "") + (" is-painted" if item.get("painted") else "")
+    glow = f';--fy:{FLAME_Y[item["kind"]]}' if item["kind"] in FLAME_Y else ""
     if item.get("painted"):
         art = f'<img class="art painted" src="{item["img"]}" alt="{kind.replace("-", " ")}">'
     elif "img" in item:
@@ -129,11 +129,12 @@ body{background:var(--hero);color:var(--ink);font-family:var(--f-body),Georgia,s
 .date{display:none}.m-cyberpunk .date{display:block}
 .phase,.date,.y2k p{font-family:var(--f-mono),monospace;font-size:calc(var(--u)*.95);text-transform:lowercase;text-align:center}
 .flame,.smoke{transform-box:view-box;transition:opacity .5s}
-.painted{object-fit:contain;object-position:50% 100%}
+.painted{object-fit:contain;object-position:50% 100%;filter:drop-shadow(0 calc(var(--u)*.28) calc(var(--u)*.3) rgba(40,10,30,.38))}
+.is-painted::before{display:none}
 .lightable{cursor:pointer}
 .lightable:focus-visible{outline:calc(var(--u)*.18) dashed var(--gold);outline-offset:calc(var(--u)*.3)}
 .out .flame{opacity:0;animation:none}.out .smoke{opacity:0;animation:none}.out::before{display:none}
-.out .painted{filter:brightness(.78) saturate(.6)}
+.out .painted{filter:brightness(.72) saturate(.55) drop-shadow(0 calc(var(--u)*.28) calc(var(--u)*.3) rgba(40,10,30,.38))}
 .flicker .flame{animation:flick 1.9s ease-in-out infinite alternate;animation-delay:calc(var(--i)*-.37s)}
 .smoke{transform-origin:68px 42px;animation:drift 7s ease-in-out infinite}
 @keyframes flick{0%{transform:scale(1,1) rotate(-2deg)}45%{transform:scale(.93,1.07) rotate(1.5deg)}100%{transform:scale(1.04,.95) rotate(-.5deg)}}
