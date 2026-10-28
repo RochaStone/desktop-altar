@@ -30,6 +30,7 @@ import altar_moon  # noqa: E402
 import altar_page  # noqa: E402
 
 OBJECTS_DIR = HERE / "objects"
+PAINTED_DIR = OBJECTS_DIR / "painted"
 STYLE_EXAMPLE = HERE / "examples" / "style.rocha-coded.json"
 HER_ALTAR = HERE / "examples" / "altar.rocha-coded.json"
 OBJECT_TYPES = ("candle", "pillar-candle", "tealight", "crystal-point", "crystal-cluster", "seashell", "pearl",
@@ -46,6 +47,7 @@ TONES = {"#50163C": "plum", "#682047": "wine", "#3B1230": "ink", "#FFF7F4": "pap
 COLOUR = re.compile(r"^#[0-9A-Fa-f]{6}$")
 FONT_NAME = re.compile(r"^[A-Za-z0-9 ]{1,40}$")
 IMAGE_NAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._ -]{0,79}\.(png|jpe?g|webp)$", re.I)
+PAINTED = re.compile(r"^painted/([a-z0-9][a-z0-9-]{0,40})\.png$")
 SIZE = re.compile(r"^\s*(\d{3,4})\s*[xX]\s*(\d{3,4})\s*$")
 MAX_OBJECTS, PER_SHELF, MAX_SHELVES, MAX_IMAGE_BYTES = 16, 6, 3, 5 * 1024 * 1024
 PLACEHOLDER = "YOUR WORDS HERE"
@@ -118,13 +120,16 @@ def validate_config(cfg: object) -> list[str]:
             errs.append(f'objects[{i}] should be a block like {{"type": "candle"}}.')
             continue
         img = o.get("image")
+        kind = o.get("type")
+        if isinstance(kind, str) and kind.startswith("mine/") and img in (None, ""):
+            img = kind[5:]
         if img not in (None, ""):
             if not isinstance(img, str) or ".." in img or not IMAGE_NAME.match(img):
                 errs.append(f"objects[{i}].image should be a file name in objects/mine, like \"nana.png\" "
                             "(png, jpg or webp, no folders).")
-        elif o.get("type") not in OBJECT_TYPES:
+        elif not (kind in OBJECT_TYPES or (isinstance(kind, str) and PAINTED.match(kind))):
             errs.append(f'objects[{i}].type "{o.get("type")}" is not in the drawer. Pick one of: '
-                        + ", ".join(OBJECT_TYPES) + '. Or add your own picture with "image".')
+                        + ", ".join(OBJECT_TYPES) + '. Or use "painted/<name>.png", or your own picture with "image".')
         text(f"objects[{i}].label", o.get("label"), 24)
         shelf = o.get("shelf")
         if shelf not in (None, ""):
@@ -229,8 +234,10 @@ def object_svg(kind: str, palette: dict) -> str:
     return retone(svg.replace("<svg ", '<svg class="art" ', 1), palette).strip()
 
 
-def find_image(name: str, config_dir: Path) -> Path | None:
-    for base in (config_dir / "objects" / "mine", OBJECTS_DIR / "mine"):
+def find_image(name: str, config_dir: Path, drawer: str = "mine") -> Path | None:
+    """A file from objects/<drawer> next to the config, then in the kit. Never outside that folder."""
+    kit = PAINTED_DIR if drawer == "painted" else OBJECTS_DIR / drawer
+    for base in (config_dir / "objects" / drawer, kit):
         cand = (base / name).resolve()
         if cand.parent == base.resolve() and cand.is_file():
             return cand
@@ -287,12 +294,27 @@ def altar_data(cfg: dict, style: dict, style_is_example: bool, motif: str, size:
     items = []
     for o in cfg.get("objects") or []:
         label = str(o.get("label") or "").strip()
-        if o.get("image"):
-            found = find_image(o["image"], config_dir)
+        kind = str(o.get("type") or "")
+        mine = o.get("image") or (kind[5:] if kind.startswith("mine/") else "")
+        painted = PAINTED.match(kind)
+        if mine:
+            found = find_image(mine, config_dir)
             if not found:
-                raise ValueError(f'I could not find objects/mine/{o["image"]}. Put the picture in the objects/mine '
+                raise ValueError(f'I could not find objects/mine/{mine}. Put the picture in the objects/mine '
                                  "folder next to your altar.config.json and build again.")
             items.append({"img": image_uri(found), "label": label, "kind": "mine", "shelf": o.get("shelf")})
+        elif painted:
+            stem = painted.group(1)
+            found = find_image(f"{stem}.png", config_dir, "painted")
+            if found:
+                items.append({"img": image_uri(found), "painted": True, "label": label, "kind": stem,
+                              "shelf": o.get("shelf")})
+            elif stem in OBJECT_TYPES:
+                items.append({"svg": object_svg(stem, ps["palette"]), "label": label, "kind": stem,
+                              "shelf": o.get("shelf")})
+            else:
+                raise ValueError(f"I could not find objects/painted/{stem}.png, and the drawer has no {stem} to use "
+                                 "instead. Add the painted file, or pick a drawer object.")
         else:
             items.append({"svg": object_svg(o["type"], ps["palette"]), "label": label, "kind": o["type"],
                           "shelf": o.get("shelf")})

@@ -12,6 +12,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
@@ -274,6 +275,58 @@ class BuildOutput(unittest.TestCase):
             res = build.build(HER, Path(tmp) / "o", "analog", build.STYLE_EXAMPLE, "1440x900", ROOT, True, NOW)
             self.assertIsNotNone(res["png"], res["message"])
             self.assertEqual(render.png_size(res["png"]), (1440, 900))
+
+
+class LightAndPainted(unittest.TestCase):
+    PNG = (b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1f\x15"
+           b"\xc4\x89\x00\x00\x00\rIDATx\x9cc\xf8\xff\xff?\x00\x05\xfe\x02\xfe\xa7\x35\x81\x84\x00\x00\x00\x00IEND\xaeB`\x82")
+
+    def test_painted_names_validate(self):
+        self.assertEqual(build.validate_config({"objects": [{"type": "painted/candle.png"}, {"type": "mine/nana.png"}]}), [])
+        for bad in ("painted/../candle.png", "painted/Candle.PNG", "painted/candle.svg", "painted/a/b.png", "mine/../x.png"):
+            self.assertTrue(build.validate_config({"objects": [{"type": bad}]}), bad)
+
+    def test_missing_painted_falls_back_to_the_drawing(self):
+        with tempfile.TemporaryDirectory() as tmp, tempfile.TemporaryDirectory() as empty:
+            with mock.patch.object(build, "PAINTED_DIR", Path(empty)):
+                res = build.build(HER, Path(tmp) / "o", None, build.STYLE_EXAMPLE, png=False, config_dir=Path(tmp), now=NOW)
+            html = res["html"].read_text(encoding="utf-8")
+            self.assertNotIn('class="art painted"', html)
+            self.assertEqual(html.count('<svg class="art"'), len(HER["objects"]))
+            self.assertIn("k-candle", html)
+
+    def test_painted_file_is_used_when_present(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            (tmp / "objects" / "painted").mkdir(parents=True)
+            (tmp / "objects" / "painted" / "candle.png").write_bytes(self.PNG)
+            cfg = {"objects": [{"type": "painted/candle.png"}, {"type": "painted/seashell.png"}]}
+            res = build.build(cfg, tmp / "o", None, build.STYLE_EXAMPLE, png=False, config_dir=tmp, now=NOW)
+            html = res["html"].read_text(encoding="utf-8")
+            self.assertEqual(html.count('class="art painted"'), 1)
+            self.assertEqual(html.count('<svg class="art"'), 1)
+            self.assertIn('data-key="0-candle"', html)
+            with self.assertRaises(ValueError):
+                build.build({"objects": [{"type": "painted/unicorn.png"}]}, tmp / "p", None, build.STYLE_EXAMPLE,
+                            png=False, config_dir=tmp, now=NOW)
+
+    def test_candles_and_incense_are_buttons(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            html = build.build(HER, Path(tmp) / "o", None, build.STYLE_EXAMPLE, png=False, config_dir=ROOT,
+                               now=NOW)["html"].read_text(encoding="utf-8")
+            self.assertEqual(html.count('role="button"'), 3)
+            self.assertIn("light or snuff the incense", html)
+            self.assertIn("localStorage", html)
+
+    @unittest.skipUnless(CHROME, "Chrome not installed: skipping the click test")
+    def test_click_snuffs_and_the_altar_remembers(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            page = build.build(HER, Path(tmp) / "o", "cyberpunk", build.STYLE_EXAMPLE, png=False, config_dir=ROOT,
+                               now=NOW)["html"]
+            rep = render.run_clicks(page)
+            self.assertNotIn("error", rep, rep)
+            self.assertEqual(rep, {"count": 3, "litAtStart": True, "outAfterClick": True, "pressed": "false",
+                                   "stored": True, "rememberedAfterReload": True, "litAgainByKeyboard": True})
 
 
 @unittest.skipUnless(CHROME, "Chrome not installed: skipping the headless render tests")

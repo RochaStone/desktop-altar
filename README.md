@@ -65,6 +65,8 @@ The full steps are under [Claude Cowork](#claude-cowork).
 - **A daily line.** Give it a few lines and a different one greets you each day.
 - **A wallpaper picture** at the exact size of your screen, for any computer with nothing to install.
 - **A living altar page** where the candles flicker, the incense drifts and the moon keeps true for months.
+- **Candles you light yourself.** In the living altar, click a candle or the incense to light it or snuff it. Your altar remembers.
+- **A painted drawer.** `objects/painted/` holds painted cutouts. Use one with `"type": "painted/candle.png"`. If a painted file is missing, the flat drawing of the same name stands in.
 - **A drag-and-drop arranger.** `arrange.html` opens in your browser. Drag things onto the shelves and press save.
 
 <p align="center"><img src="docs/img/arrange.png" width="640" alt="The arrange page: a cream window titled arrange.exe with three numbered steps, a drawer of eighteen small altar objects, a box for your own picture, three shelves with a few objects placed and labelled, and on the right the name, intention, daily lines, look, screen size, moon and candle settings and a plum save altar.config.json button."></p>
@@ -122,6 +124,14 @@ Your altar itself lives in `altar.config.json`. Start from the blank `altar.exam
 The wallpaper picture is a still. To have the candles flicker and the moon change each night, show `out/altar.html` with a free wallpaper app.
 These apps belong to other people, and they are lovely. This kit makes a file they can show. Their code is theirs and stays with them.
 
+### Light and snuff your candles
+In the living altar, click a candle or the incense to light it or snuff it. You can also press Tab to reach it and Enter to click.
+The altar remembers which ones you snuffed, on that computer, until you light them again.
+The wallpaper picture is a still, so clicking it does nothing. Clicking works in the living altar only, and only when your wallpaper app lets clicks through:
+- **Plash (Mac):** turn on **Browsing Mode** from the Plash menu. Click your candles, then turn Browsing Mode off so your desktop icons work again.
+- **Lively (Windows):** turn on the interactive setting for your wallpaper in Lively (it may be called Wallpaper Input; set it to Mouse).
+- **Übersicht (Mac):** it passes clicks to your altar the way its Preferences say. If a click lands on the desktop instead, look for the interaction setting there.
+
 ### Plash (Mac)
 1. Get Plash from [sindresorhus.com/plash](https://sindresorhus.com/plash). It is free on the Mac App Store.
 2. Open it. A small Plash icon appears in the menu bar, the strip along the top of your screen.
@@ -161,7 +171,7 @@ This happens to everyone the first time. Here are the most common moments and th
 | `altar_page.py` | draws the altar page, all three motifs from one function |
 | `altar_moon.py` | the moon maths, worked out on your computer |
 | `arrange.html` | the drag-to-arrange page, one file, opens in any browser |
-| `objects/` | the drawer of altar objects, and `objects/mine/` for your own pictures |
+| `objects/` | the drawer of altar objects, `objects/painted/` for painted cutouts, and `objects/mine/` for your own pictures |
 | `altar.example.json`, `examples/altar.rocha-coded.json` | a blank altar for you, and mine |
 | `examples/style.rocha-coded.json`, `style.example.json`, `STYLE.md` | Rocha's example style, your blank one, and what each key does |
 | `scripts/render.py` | headless Chrome for the wallpaper picture and the checks |

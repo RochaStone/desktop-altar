@@ -7,17 +7,17 @@
   "hemisphere": "north",
   "candle_flicker": true,
   "objects": [
-    { "type": "crescent-moon", "shelf": 1 },
-    { "type": "tarot-back", "shelf": 1 },
-    { "type": "intention-card", "label": "LORE", "shelf": 1 },
-    { "type": "crystal-cluster", "shelf": 1 },
-    { "type": "feather", "shelf": 1 },
-    { "type": "candle", "shelf": 2 },
-    { "type": "seashell", "shelf": 2 },
-    { "type": "pillar-candle", "shelf": 2 },
-    { "type": "pearl", "shelf": 2 },
-    { "type": "incense", "shelf": 2 },
-    { "type": "rose", "shelf": 2 }
+    { "type": "painted/crescent-moon.png", "shelf": 1 },
+    { "type": "painted/tarot-back.png", "shelf": 1 },
+    { "type": "painted/intention-card.png", "label": "LORE", "shelf": 1 },
+    { "type": "painted/crystal-cluster.png", "shelf": 1 },
+    { "type": "painted/feather.png", "shelf": 1 },
+    { "type": "painted/candle.png", "shelf": 2 },
+    { "type": "painted/seashell.png", "shelf": 2 },
+    { "type": "painted/pillar-candle.png", "shelf": 2 },
+    { "type": "painted/pearl.png", "shelf": 2 },
+    { "type": "painted/incense.png", "shelf": 2 },
+    { "type": "painted/rose.png", "shelf": 2 }
   ],
   "daily_line": [
     "I AM SO LUCKY",

@@ -160,3 +160,50 @@ def run_arrange(page: Path, picks: list[int], name: str, intention: str, daily: 
         return json.loads(raw)
     except ValueError:
         return {"error": "report was " + raw[:80]}
+
+
+CLICK = """<!doctype html><html><body style="margin:0"><iframe id="f" src="{src}" style="width:1280px;height:800px;border:0"></iframe>
+<pre id="r">pending</pre><script>
+var loads = 0, rep = {{}};
+document.getElementById("f").onload = function () {{
+  var fr = this, d = fr.contentDocument, out = document.getElementById("r");
+  loads += 1;
+  try {{
+    var first = function () {{ return d.querySelector(".lightable"); }};
+    if (loads === 1) {{
+      rep.count = d.querySelectorAll(".lightable").length;
+      rep.litAtStart = !first().classList.contains("out");
+      first().click();
+      rep.outAfterClick = first().classList.contains("out");
+      rep.pressed = first().getAttribute("aria-pressed");
+      rep.stored = fr.contentWindow.localStorage.length > 0;
+      fr.contentWindow.location.reload();
+    }} else {{
+      rep.rememberedAfterReload = first().classList.contains("out");
+      first().dispatchEvent(new KeyboardEvent("keydown", {{key: "Enter", bubbles: true}}));
+      rep.litAgainByKeyboard = !first().classList.contains("out");
+      fr.contentWindow.localStorage.clear();
+      out.textContent = JSON.stringify(rep);
+    }}
+  }} catch (e) {{ out.textContent = JSON.stringify({{error: e.message}}); }}
+}};
+</script></body></html>"""
+
+
+def run_clicks(page: Path) -> dict:
+    """Click the first candle in altar.html, reload, and report whether the altar remembered."""
+    page = Path(page).resolve()
+    with tempfile.TemporaryDirectory() as tmp:
+        harness = Path(tmp) / "click-harness.html"
+        harness.write_text(CLICK.format(src=page.as_uri()), encoding="utf-8")
+        res = _run(["--dump-dom", harness.as_uri()], 1400, 1000, budget=8000)
+    if res is None:
+        return {"error": NO_CHROME}
+    m = re.search(r'<pre id="r">(.*?)</pre>', res.stdout, re.S)
+    if not m:
+        return {"error": "Chrome gave no report."}
+    raw = m.group(1).replace("&lt;", "<").replace("&gt;", ">").replace("&quot;", '"').replace("&amp;", "&")
+    try:
+        return json.loads(raw)
+    except ValueError:
+        return {"error": "report was " + raw[:80]}

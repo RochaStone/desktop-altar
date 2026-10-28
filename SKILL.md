@@ -26,6 +26,8 @@ Ask: **"What do you want on your altar? Name three things."**
 Match each thing to the drawer in `SKILL_DIR/objects/`: candle, pillar-candle, tealight, crystal-point,
 crystal-cluster, seashell, pearl, crescent-moon, full-moon, rose, dried-flowers, incense, photo-frame,
 intention-card, tarot-back, cauldron, bell, feather. Pick the closest one and say which you picked.
+If she would like the painted look, use `"type": "painted/<name>.png"` (for example `painted/candle.png`).
+A missing painted file falls back to the flat drawing of the same name, so it always builds.
 If she names something personal (a photo, her dog, a ticket stub), it becomes her own picture: ask her to put the
 image in an `objects/mine` folder inside her working folder, and use `{"image": "file-name.png"}`.
 If she wants a small label under a thing, use her exact words (24 characters at most).
@@ -81,6 +83,9 @@ Ask: **"Want it live, with the candles flickering and the moon changing each nig
   If Plash will not show it, walk her through Uebersicht instead: copy `out/altar.widget` into its widgets folder.
 - **Windows:** walk her through Lively Wallpaper and `out\altar.html`.
 Give one click at a time and wait for her to say it worked.
+Then tell her: in the living altar she can click a candle or the incense to light it or snuff it, and the altar remembers.
+On a Mac with Plash, that needs Browsing Mode on (then off again for her desktop icons). In Lively it needs the
+interactive setting (Wallpaper Input set to Mouse). The wallpaper picture is a still, so it cannot be clicked.
 
 ## 5. Changing it later
 Tell her: open `SKILL_DIR/arrange.html` in her browser to drag things around, then press save and move the

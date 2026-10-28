@@ -16,6 +16,7 @@ AXES = {"Fraunces": ":opsz,wght@9..144,400;9..144,900", "Bricolage Grotesque": "
         "DM Mono": ":wght@400;500"}
 PIXEL = "Silkscreen"
 FLAME_Y = {"candle": 0.19, "pillar-candle": 0.28, "tealight": 0.68}
+LIGHTABLE = (*FLAME_Y, "incense")
 STAR = ["0001000", "0001000", "1111111", "0111110", "0110110", "1000001"]
 # Dark screens swap the line colour so objects read as line art on the cyberdeck.
 DARK_SWAP = {"ink": "paper", "plum": "wine"}
@@ -53,11 +54,18 @@ def _figure(item: dict, i: int, dark: bool, pal: dict) -> str:
     kind = escape(item["kind"])
     lit = " lit" if item["kind"] in FLAME_Y else ""
     glow = f';--fy:{FLAME_Y[item["kind"]]}' if lit else ""
-    if "img" in item:
+    if item.get("painted"):
+        art = f'<img class="art painted" src="{item["img"]}" alt="{kind.replace("-", " ")}">'
+    elif "img" in item:
         art = f'<span class="mine"><img src="{item["img"]}" alt="{label or "my own picture"}"></span>'
     else:
         art = _swap_dark(item["svg"], pal) if dark else item["svg"]
-    return f'<figure class="obj k-{kind}{lit}" style="--i:{i}{glow}">{art}{cap}</figure>'
+    click = ""
+    if item["kind"] in LIGHTABLE:
+        what = "incense" if item["kind"] == "incense" else "candle"
+        click = (f' lightable" data-key="{i}-{kind}" role="button" tabindex="0" aria-pressed="true" '
+                 f'aria-label="light or snuff the {what}')
+    return f'<figure class="obj k-{kind}{lit}{click}" style="--i:{i}{glow}">{art}{cap}</figure>'
 
 
 def _shelves(data: dict) -> str:
@@ -120,7 +128,12 @@ body{background:var(--hero);color:var(--ink);font-family:var(--f-body),Georgia,s
 .moon-dark{fill:var(--wine)}.moon-lit{fill:var(--paper)}.moon-rim{fill:none;stroke:var(--gold);stroke-width:2}
 .date{display:none}.m-cyberpunk .date{display:block}
 .phase,.date,.y2k p{font-family:var(--f-mono),monospace;font-size:calc(var(--u)*.95);text-transform:lowercase;text-align:center}
-.flame,.smoke{transform-box:view-box}
+.flame,.smoke{transform-box:view-box;transition:opacity .5s}
+.painted{object-fit:contain;object-position:50% 100%}
+.lightable{cursor:pointer}
+.lightable:focus-visible{outline:calc(var(--u)*.18) dashed var(--gold);outline-offset:calc(var(--u)*.3)}
+.out .flame{opacity:0;animation:none}.out .smoke{opacity:0;animation:none}.out::before{display:none}
+.out .painted{filter:brightness(.78) saturate(.6)}
 .flicker .flame{animation:flick 1.9s ease-in-out infinite alternate;animation-delay:calc(var(--i)*-.37s)}
 .smoke{transform-origin:68px 42px;animation:drift 7s ease-in-out infinite}
 @keyframes flick{0%{transform:scale(1,1) rotate(-2deg)}45%{transform:scale(.93,1.07) rotate(1.5deg)}100%{transform:scale(1.04,.95) rotate(-.5deg)}}
@@ -249,7 +262,7 @@ def render_page(data: dict) -> str:
 <body>
 {body}
 <script type="application/json" id="altar-live">{_live(data)}</script>
-<script>{LIVE_JS}</script>
+<script>{LIVE_JS}{LIGHT_JS}</script>
 </body>
 </html>
 """
@@ -292,5 +305,33 @@ LIVE_JS = """
   }
   tick();
   setInterval(tick, 10 * 60 * 1000);
+})();
+"""
+
+
+LIGHT_JS = """
+(function () {
+  if (document.documentElement.classList.contains("still")) return;
+  var KEY = "desktop-altar:" + location.pathname + ":snuffed", out = [];
+  try { out = JSON.parse(localStorage.getItem(KEY) || "[]"); } catch (e) { out = []; }
+  if (!Array.isArray(out)) out = [];
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(out)); } catch (e) { return; } }
+  Array.prototype.forEach.call(document.querySelectorAll(".lightable"), function (el) {
+    var key = el.getAttribute("data-key");
+    function show() {
+      var dark = out.indexOf(key) >= 0;
+      el.classList.toggle("out", dark);
+      el.setAttribute("aria-pressed", dark ? "false" : "true");
+    }
+    function flip() {
+      var at = out.indexOf(key);
+      if (at >= 0) out.splice(at, 1); else out.push(key);
+      save();
+      show();
+    }
+    el.addEventListener("click", flip);
+    el.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); flip(); } });
+    show();
+  });
 })();
 """

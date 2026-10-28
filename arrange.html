@@ -136,8 +136,15 @@ textarea{min-height:96px;resize:vertical}
     }
     return kids.length;
   }
+  var PAINTED = /^painted\/([a-z0-9][a-z0-9-]{0,40})\.png$/;
   function art(thing) {
     if (thing.image) return el("span", { "class": "pic" }, thing.image);
+    var painted = PAINTED.exec(thing.type);
+    if (painted) {
+      var img = el("img", { src: "objects/" + thing.type, alt: painted[1].replace(/-/g, " ") });
+      img.addEventListener("error", function () { img.src = "objects/" + painted[1] + ".svg"; }, { once: true });
+      return img;
+    }
     return el("img", { src: "objects/" + thing.type + ".svg", alt: thing.type.replace(/-/g, " ") });
   }
   function draw() {
@@ -241,8 +248,9 @@ textarea{min-height:96px;resize:vertical}
       shelves = [[], [], []];
       (cfg.objects || []).slice(0, MAX).forEach(function (o, i) {
         var s = Math.min(SHELVES, Math.max(1, parseInt(o.shelf, 10) || Math.floor(i / PER_SHELF) + 1)) - 1;
-        var thing = o.image ? { image: String(o.image), label: o.label || "" } : { type: o.type, label: o.label || "" };
-        if (thing.image || OBJECTS.indexOf(thing.type) >= 0) {
+        var mine = o.image || (/^mine\//.test(o.type || "") ? String(o.type).slice(5) : "");
+        var thing = mine ? { image: String(mine), label: o.label || "" } : { type: o.type, label: o.label || "" };
+        if (thing.image || OBJECTS.indexOf(thing.type) >= 0 || PAINTED.test(thing.type || "")) {
           if (shelves[s].length >= PER_SHELF) s = shelves.findIndex(function (x) { return x.length < PER_SHELF; });
           if (s >= 0) { thing.id = nextId++; shelves[s].push(thing); }
         }
